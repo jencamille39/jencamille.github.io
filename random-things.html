@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Things - Rey Jen Camille</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #ff69b4, #000);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header {
+      text-align: center;
+      padding: 50px 20px;
+      background: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+      text-transform: uppercase;
+      color: #ffd6eb;
+      text-shadow: 0 0 15px #ff69b4, 0 0 25px #e94560;
+      animation: glowPulse 3s infinite alternate;
+    }
+    @keyframes glowPulse {
+      from { text-shadow: 0 0 15px #ff69b4; }
+      to { text-shadow: 0 0 35px #e94560; }
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      margin: 40px;
+    }
+    .item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+      animation: bounceBox 3s infinite ease-in-out;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+    /* Expanded Big Box style for Thirst Trap card */
+    .item.big-box {
+      width: 550px;
+      max-width: 90vw;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #ff69b4;
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+      animation: none; /* Stops bouncing when opened */
+    }
+    @keyframes bounceBox {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: #000;
+      border-radius: 10px;
+      border: 3px solid #ff69b4;
+      margin-bottom: 15px;
+    }
+    /* Larger photo container for portrait selfie when expanded */
+    .item.big-box img {
+      height: 420px;
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.8);
+    }
+    .item span {
+      font-size: 1.2em;
+      color: #ffd6eb;
+      text-shadow: 0 0 10px #ff69b4;
+    }
+    .item p {
+      font-size: 0.95em;
+      color: #ffd6eb;
+      line-height: 1.6;
+      margin-top: 10px;
+      text-align: left;
+    }
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(40px);
+      animation: wordSlide 0.4s forwards;
+      margin-right: 4px;
+    }
+    @keyframes wordSlide {
+      0% { opacity: 0; transform: translateX(40px) translateY(0); }
+      50% { opacity: 1; transform: translateX(0) translateY(-6px); }
+      100% { opacity: 1; transform: translateX(0) translateY(0); }
+    }
+    .game-link {
+      text-align: center;
+      margin: 50px 20px;
+    }
+    .game-link a {
+      display: inline-block;
+      padding: 12px 20px;
+      background: #ff69b4;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .game-link a:hover {
+      background: #ff85c1;
+    }
+    footer {
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    footer a {
+      color: #ffd6eb;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #ff69b4;
+    }
+    .flower {
+      position: fixed;
+      top: -50px;
+      width: 25px;
+      height: 25px;
+      background: radial-gradient(circle, #ff69b4 40%, transparent 70%);
+      border-radius: 50%;
+      animation: fall linear infinite;
+      pointer-events: none;
+      opacity: 0.8;
+      z-index: 999;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Random Things</h1>
+  </header>
+
+  <section class="gallery">
+    <div class="item" onclick="showPic(this, 'friend.jpg', `Me and my best friend — the person who has always been there for me through every laugh, every tear, and every late-night adventure. This photo was taken one evening when we were heading home late, but we couldn’t resist capturing the moment. It’s not just a picture, it’s a memory of how we always find joy even in the simplest times, proving that friendship makes even the longest nights brighter.`)">
+      <span>Click here</span>
+    </div>
+    <div class="item" onclick="showPic(this, 'monster.jpg', `Monster — my favorite drink! It gave me energy during long days, especially in ROTC training, but sometimes it was also the reason I nearly blacked out from exhaustion. Still, it became part of my routine, a funny reminder of how I pushed myself beyond limits while laughing at my own struggles. It’s more than just a drink; it’s a symbol of my determination and resilience, even when I was tired and worn out.`)">
+      <span>Click here</span>
+    </div>
+    <div class="item" onclick="showPic(this, 'pusa.jpg', `C.A.T. moments — unforgettable times when we were the uppers guiding our lowers. I miss the chaos: the shouting, the rushing, the endless tasks. I was known as the “dragon” because I was always strict, but deep down those moments were filled with camaraderie, discipline, and laughter that bonded us forever. It taught me leadership, patience, and the importance of teamwork, even when things felt overwhelming.`)">
+      <span>Click here</span>
+    </div>
+    <div class="item" onclick="showPic(this, 'lomi.jpg', `Batangas Lomi — my ultimate comfort food. The rich noodles, the savory broth, and the squeeze of calamansi with soy make it perfect. I always eat this before heading back to Baguio, and it reminds me of home, family, and the flavors that bring me happiness every single time. It’s not just food, it’s a tradition that warms my heart and connects me to my roots.`)">
+      <span>Click here</span>
+    </div>
+    <!-- Large Box Thirst Trap Card -->
+    <div class="item" onclick="showPic(this, 'ako.jpg', `Thirst trap vibes — that’s me, with a filter of course. Even if it’s just a simple selfie, it’s a reminder that sometimes we need to appreciate ourselves, laugh at our imperfections, and celebrate the little ways we can feel beautiful. It’s not about perfection, it’s about confidence, fun, and embracing who we are in every moment.`, true)">
+      <span>Click here</span>
+    </div>
+  </section>
+
+  <!-- Flappy Cat Game Section -->
+  <section class="game-link">
+    <h2>Play My Flappy Cat Game!</h2>
+    <p>Click below to try my fun little game — a cat flying through pipes, just like Flappy Bird but cuter. Test your skills and see how high you can score!</p>
+    <a href="flappy-cat.html" target="_blank">Play Flappy Cat 🐱</a>
+  </section>
+
+  <footer>
+    <p>📞 09121994848 | 📧 <a href="mailto:jencamille39@gmail.com">jencamille39@gmail.com</a></p>
+  </footer>
+
+  <script>
+    // Flower rain generator
+    function createFlower() {
+      const flower = document.createElement('div');
+      flower.classList.add('flower');
+      flower.style.left = Math.random() * window.innerWidth + 'px';
+      flower.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(flower);
+      setTimeout(() => flower.remove(), 10000);
+    }
+    setInterval(createFlower, 250);
+
+    // Show image + word-by-word animated caption
+    function showPic(item, imgSrc, caption, isBigBox = false) {
+      // Prevent re-triggering if already opened
+      if (item.getAttribute('data-opened') === 'true') return;
+      item.setAttribute('data-opened', 'true');
+
+      // Expand container size if big box flag is true
+      if (isBigBox) {
+        item.classList.add('big-box');
+      }
+
+      // Clear the "Click here" text
+      item.innerHTML = '';
+      item.style.cursor = 'default';
+
+      // Create and render image
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.alt = "Gallery photo";
+      item.appendChild(img);
+
+      // Create paragraph container for caption
+      const paragraph = document.createElement('p');
+      const words = caption.trim().split(/\s+/);
+
+      // Append each word wrapped in a delayed animation span
+      words.forEach((word, index) => {
+        const span = document.createElement('span');
+        span.classList.add('word');
+        span.textContent = word;
+        span.style.animationDelay = `${index * 0.05}s`;
+        paragraph.appendChild(span);
+      });
+
+      item.appendChild(paragraph);
+    }
+  </script>
+</body>
+</html>

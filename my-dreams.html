@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Dreams - Rey Jen Camille</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #ff69b4, #000);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(0,0,0,0.8);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #ffd6eb;
+      text-shadow: 0 0 15px #ff69b4, 0 0 25px #e94560;
+      animation: glowPulse 3s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from { text-shadow: 0 0 15px #ff69b4; }
+      to { text-shadow: 0 0 35px #e94560; }
+    }
+
+    .dreams {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 50px;
+      margin: 70px;
+      background: rgba(255,255,255,0.1);
+      padding: 50px;
+      border-radius: 25px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+    }
+
+    .pic-box {
+      width: 320px;
+      height: 400px;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      border: 5px solid #ff69b4;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.7);
+      cursor: pointer;
+      font-size: 1.5em;
+      text-shadow: 0 0 10px #ff69b4;
+      animation: bounceBox 3s infinite ease-in-out;
+    }
+
+    @keyframes bounceBox {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .pic-box img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+
+    .dreams-text {
+      max-width: 600px;
+      font-size: 1.25em;
+      line-height: 1.9;
+      color: #ffd6eb;
+    }
+
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(50px);
+      animation: wordSlide 0.8s forwards;
+      margin-right: 6px;
+    }
+
+    @keyframes wordSlide {
+      0% { opacity: 0; transform: translateX(50px) translateY(0); }
+      50% { opacity: 1; transform: translateX(0) translateY(-8px); }
+      100% { opacity: 1; transform: translateX(0) translateY(0); }
+    }
+
+    footer {
+      background: rgba(0,0,0,0.9);
+      color: #fff;
+      text-align: center;
+      padding: 25px;
+      font-size: 1em;
+    }
+
+    footer a {
+      color: #ffd6eb;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #ff69b4;
+    }
+
+    /* Flower rain effect */
+    .flower {
+      position: fixed;
+      top: -50px;
+      width: 35px;
+      height: 35px;
+      background: radial-gradient(circle, #ff69b4 40%, transparent 70%);
+      border-radius: 50%;
+      animation: fall linear infinite;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Dreams</h1>
+  </header>
+
+  <section class="dreams">
+    <!-- Dream image box starts blank -->
+    <div class="pic-box" onclick="showPic()">
+      <span>Click here</span>
+      <img src="women.jpg" alt="My Dreams" id="dreamPic">
+    </div>
+
+    <div class="dreams-text" id="dreamText"></div>
+  </section>
+
+  <footer>
+    <p>📞 09121994848 | 📧 <a href="mailto:jencamille39@gmail.com">jencamille39@gmail.com</a></p>
+  </footer>
+
+  <!-- Flower rain script -->
+  <script>
+    function createFlower() {
+      const flower = document.createElement('div');
+      flower.classList.add('flower');
+      flower.style.left = Math.random() * window.innerWidth + 'px';
+      flower.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(flower);
+
+      setTimeout(() => {
+        flower.remove();
+      }, 10000);
+    }
+    setInterval(createFlower, 250);
+
+    // Show dream picture when clicked
+    function showPic() {
+      document.getElementById('dreamPic').style.display = 'block';
+      document.querySelector('.pic-box span').style.display = 'none';
+    }
+
+    // Dream text (animated per word)
+    const text = `My dream is to finish my studies and proudly become a licensed criminologist. I want to serve with honor, discipline, and courage — and one day, to wear the uniform of a soldier who protects the people I love and the community around me.
+
+I dream of building a beautiful home for myself and another for my parents, so they can live comfortably without worrying about work. For me, success means giving back to my family and making sure they live a life of peace and happiness.
+
+Beyond career and family, I dream of becoming a woman with a strong heart — someone who inspires, protects, and cares deeply for everyone close to me. My dreams are not just about reaching goals, but about becoming the best version of myself: brave, kind, and unstoppable.`;
+
+    const container = document.getElementById('dreamText');
+    let delay = 0;
+    const words = text.split(" ");
+    for (let word of words) {
+      const span = document.createElement('span');
+      span.textContent = word;
+      span.classList.add('word');
+      span.style.animationDelay = delay + 's';
+      container.appendChild(span);
+      delay += 0.15; // each word jumps in sequence
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Cat - Cyber Edition</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #050505, #1a001a, #ff007f);
+      background-size: 400% 400%;
+      animation: ambientBg 12s ease infinite;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      color: #ffd6eb;
+      user-select: none;
+      overflow-x: hidden;
+    }
+
+    @keyframes ambientBg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      margin: 20px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #ff69b4, 0 0 20px #e94560;
+      animation: glowTitle 2s infinite alternate;
+    }
+
+    @keyframes glowTitle {
+      from { text-shadow: 0 0 10px #ff69b4; }
+      to { text-shadow: 0 0 25px #ff1493; }
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 400px;
+      margin: 0 auto;
+    }
+
+    #gameCanvas {
+      background: radial-gradient(circle, #2d0b38 0%, #0a0112 100%);
+      border: 3px solid #ff69b4;
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.5);
+      border-radius: 15px;
+      display: block;
+      cursor: pointer;
+    }
+
+    .dashboard {
+      display: flex;
+      justify-content: space-between;
+      width: 400px;
+      margin: 10px auto;
+      font-weight: bold;
+      text-shadow: 0 0 8px #ff69b4;
+    }
+
+    #scoreBoard { font-size: 1.4em; color: #ffd6eb; }
+    #bestScoreBoard { font-size: 1.4em; color: #00ffff; text-shadow: 0 0 8px #00ffff; }
+
+    /* Modal Overlays */
+    #startScreen, #gameOverScreen {
+      position: absolute;
+      top: 0; left: 0;
+      width: 400px; height: 500px;
+      background: rgba(10, 2, 18, 0.88);
+      backdrop-filter: blur(4px);
+      border-radius: 15px;
+      color: #ffd6eb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 0 15px #ff69b4;
+      box-sizing: border-box;
+      padding: 20px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 28px;
+      font-size: 1.1em;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ff69b4, #ff1493);
+      border: none;
+      border-radius: 25px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff69b4;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #ff1493;
+    }
+
+    .controls-hint {
+      font-size: 0.85em;
+      opacity: 0.8;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Flappy Cat 🐱</h1>
+
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+
+    <!-- Start Overlay -->
+    <div id="startScreen">
+      <h2>READY FOR TAKEOFF?</h2>
+      <p>Tap, Click, or press <b>SPACE</b> to Jump!</p>
+      <button id="startBtn">START GAME</button>
+      <p class="controls-hint">Avoid the neon obstacles and set a high score!</p>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div id="gameOverScreen" style="display:none;">
+      <h2>GAME OVER</h2>
+      <p id="finalScore" style="font-size: 1.2em; color: #ff69b4;"></p>
+      <p id="bestScoreMsg" style="color: #00ffff;"></p>
+      <button id="retryBtn">TRY AGAIN</button>
+    </div>
+  </div>
+
+  <div class="dashboard">
+    <div id="scoreBoard">Score: 0</div>
+    <div id="bestScoreBoard">Best: 0</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreBoard = document.getElementById("scoreBoard");
+    const bestScoreBoard = document.getElementById("bestScoreBoard");
+    const startScreen = document.getElementById("startScreen");
+    const gameOverScreen = document.getElementById("gameOverScreen");
+    const startBtn = document.getElementById("startBtn");
+    const retryBtn = document.getElementById("retryBtn");
+    const finalScore = document.getElementById("finalScore");
+    const bestScoreMsg = document.getElementById("bestScoreMsg");
+
+    // Game Config & Variables
+    let catY, velocity, gravity, jump, pipes, score, gameRunning, pipeInterval, speed;
+    let particles = [];
+    let trail = [];
+
+    const catImg = new Image();
+    catImg.src = "flying-cat.jpg";
+
+    let bestScore = localStorage.getItem("flappyCatBest") || 0;
+    bestScoreBoard.textContent = "Best: " + bestScore;
+
+    function resetGame() {
+      catY = 200;
+      velocity = 0;
+      gravity = 0.45;
+      jump = -7.5;
+      pipes = [];
+      particles = [];
+      trail = [];
+      score = 0;
+      speed = 2.5;
+      gameRunning = false;
+      scoreBoard.textContent = "Score: 0";
+      clearInterval(pipeInterval);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawCat();
+    }
+
+    // Particle Effect System
+    function addExplosion(x, y, count = 15, color = "#ff69b4") {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6,
+          size: Math.random() * 4 + 2,
+          color: color,
+          alpha: 1
+        });
+      }
+    }
+
+    function updateParticles() {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.03;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+        } else {
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+    }
+
+    // Motion Trail for Flying Cat
+    function drawTrail() {
+      trail.push({ x: 80, y: catY, alpha: 0.6 });
+      if (trail.length > 8) trail.shift();
+
+      for (let i = 0; i < trail.length; i++) {
+        let t = trail[i];
+        t.x -= speed;
+        ctx.save();
+        ctx.globalAlpha = (i / trail.length) * 0.4;
+        ctx.fillStyle = "#ff69b4";
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawCat() {
+      drawTrail();
+
+      ctx.save();
+      // Smooth tilt rotation based on velocity
+      let angle = Math.min(Math.max(velocity * 0.05, -0.4), 0.6);
+      ctx.translate(80, catY);
+      ctx.rotate(angle);
+
+      // Neon Glow under cat
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = "#ff69b4";
+
+      // Draw image safely centered at position
+      ctx.drawImage(catImg, -18, -18, 36, 36);
+      ctx.restore();
+    }
+
+    function drawPipes() {
+      pipes.forEach(pipe => {
+        // Gradient styling for pipes
+        let grad = ctx.createLinearGradient(pipe.x, 0, pipe.x + 52, 0);
+        grad.addColorStop(0, "#000");
+        grad.addColorStop(0.5, "#ff1493");
+        grad.addColorStop(1, "#000");
+
+        ctx.fillStyle = grad;
+        ctx.strokeStyle = "#ff69b4";
+        ctx.lineWidth = 2;
+
+        // Top Pipe
+        ctx.fillRect(pipe.x, 0, 52, pipe.top);
+        ctx.strokeRect(pipe.x, 0, 52, pipe.top);
+
+        // Bottom Pipe
+        let bottomY = pipe.top + 130;
+        ctx.fillRect(pipe.x, bottomY, 52, canvas.height - bottomY);
+        ctx.strokeRect(pipe.x, bottomY, 52, canvas.height - bottomY);
+      });
+    }
+
+    function update() {
+      if (!gameRunning) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      velocity += gravity;
+      catY += velocity;
+
+      drawCat();
+      drawPipes();
+      updateParticles();
+
+      pipes.forEach((pipe, index) => {
+        pipe.x -= speed;
+
+        // Score logic
+        if (!pipe.passed && pipe.x + 52 < 80) {
+          pipe.passed = true;
+          score++;
+          scoreBoard.textContent = "Score: " + score;
+          addExplosion(80, catY, 10, "#00ffff");
+
+          // Speed scaling every 5 points
+          if (score % 5 === 0) speed += 0.3;
+        }
+
+        // Precise collision detection (Cat bounds: radius ~15px)
+        if (
+          80 + 15 > pipe.x &&
+          80 - 15 < pipe.x + 52 &&
+          (catY - 15 < pipe.top || catY + 15 > pipe.top + 130)
+        ) {
+          addExplosion(80, catY, 25, "#ff0000");
+          endGame();
+        }
+      });
+
+      // Remove passed offscreen pipes
+      if (pipes.length > 0 && pipes[0].x + 52 < 0) {
+        pipes.shift();
+      }
+
+      // Ceiling and Floor boundaries
+      if (catY + 15 > canvas.height || catY - 15 < 0) {
+        addExplosion(80, catY, 25, "#ff0000");
+        endGame();
+      }
+
+      if (gameRunning) requestAnimationFrame(update);
+    }
+
+    function spawnPipe() {
+      if (!gameRunning) return;
+      let top = Math.floor(Math.random() * 200) + 60;
+      pipes.push({ x: canvas.width, top: top, passed: false });
+    }
+
+    function handleJump() {
+      if (gameRunning) {
+        velocity = jump;
+        addExplosion(75, catY + 10, 4, "#ff69b4");
+      }
+    }
+
+    function startGame() {
+      startScreen.style.display = "none";
+      gameOverScreen.style.display = "none";
+      gameRunning = true;
+      pipes = [];
+      particles = [];
+      trail = [];
+      score = 0;
+      catY = 200;
+      velocity = 0;
+      speed = 2.5;
+      scoreBoard.textContent = "Score: 0";
+      pipeInterval = setInterval(spawnPipe, 1800);
+      update();
+    }
+
+    function endGame() {
+      gameRunning = false;
+      clearInterval(pipeInterval);
+      finalScore.textContent = "Your Score: " + score;
+
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem("flappyCatBest", bestScore);
+      }
+
+      bestScoreBoard.textContent = "Best: " + bestScore;
+      bestScoreMsg.textContent = "Best Score: " + bestScore;
+
+      setTimeout(() => {
+        gameOverScreen.style.display = "flex";
+      }, 400);
+    }
+
+    // Controls listeners
+    startBtn.addEventListener("click", startGame);
+    retryBtn.addEventListener("click", startGame);
+
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        handleJump();
+      }
+    });
+
+    // Tap/Click on canvas to jump
+    canvas.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      handleJump();
+    });
+
+    catImg.onload = resetGame;
+  </script>
+</body>
+</html>

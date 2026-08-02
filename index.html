@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rey Jen Camille - Home</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #ff0080, #00c9ff);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px;
+      background: rgba(0,0,0,0.7);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffd6eb;
+      text-shadow: 0 0 15px #ff69b4, 0 0 25px #e94560;
+      animation: glowPulse 3s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from { text-shadow: 0 0 15px #ff69b4; }
+      to { text-shadow: 0 0 35px #e94560; }
+    }
+
+    .motto {
+      font-style: italic;
+      margin-top: 15px;
+      font-size: 1.3em;
+      color: #ffd6eb;
+      text-shadow: 0 0 10px #00c9ff;
+    }
+
+    .boxes {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+      margin: 60px;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 30px;
+      width: 450px;   /* much bigger box */
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+      animation: bounce 3s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .box:hover {
+      transform: translateY(-15px) scale(1.05);
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 0 40px #ff69b4;
+    }
+
+    .box img {
+      width: 100%;
+      height: 320px;   /* bigger image space */
+      object-fit: cover;
+      border-radius: 25px;
+      margin-bottom: 20px;
+      border: 5px solid #ff69b4;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+    }
+
+    .box a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 26px;  /* bigger text */
+      display: block;
+      text-shadow: 0 0 10px #00c9ff;
+    }
+
+    .socials {
+      text-align: center;
+      margin: 40px;
+    }
+
+    .socials a {
+      color: #ffd6eb;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 12px;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .socials a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #ff69b4;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      font-size: 1em;
+      box-shadow: 0 -8px 20px rgba(0,0,0,0.6);
+    }
+
+    footer a {
+      color: #ffd6eb;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px #ff69b4;
+    }
+
+    /* Flower rain effect */
+    .flower {
+      position: fixed;
+      top: -50px;
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, #ff69b4 40%, transparent 70%);
+      border-radius: 50%;
+      animation: fall linear infinite;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Website</h1>
+    <p class="motto">"Embrace the chaos, trust the process, and never stop learning."</p>
+  </header>
+
+  <!-- Boxes linking to other pages -->
+  <section class="boxes">
+    <div class="box">
+      <img src="me.jpg" alt="All About Me">
+      <a href="all-about-me.html">All About Me</a>
+    </div>
+    <div class="box">
+      <img src="army.jpg" alt="My Dreams">
+      <a href="my-dreams.html">My Dreams</a>
+    </div>
+    <div class="box">
+      <img src="cat.jpg" alt="Random Things">
+      <a href="random-things.html">Random Things</a>
+    </div>
+  </section>
+
+  <!-- Social links -->
+  <section class="socials">
+    <h2>Connect with me</h2>
+    <p>
+      <a href="https://www.facebook.com/share/1EBRJyQ9ca/" target="_blank">Facebook</a> |
+      <a href="https://www.instagram.com/j_en.14?igsh=MTUwdXZzMmVma2drcw==" target="_blank">Instagram</a> |
+      <a href="https://www.tiktok.com/@jencamille14?_r=1&_t=ZS-9882YDMmXib" target="_blank">TikTok</a>
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>📞 09121994848 | 📧 <a href="mailto:jencamille39@gmail.com">jencamille39@gmail.com</a></p>
+  </footer>
+
+  <!-- Flower rain script -->
+  <script>
+    function createFlower() {
+      const flower = document.createElement('div');
+      flower.classList.add('flower');
+      flower.style.left = Math.random() * window.innerWidth + 'px';
+      flower.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(flower);
+
+      setTimeout(() => {
+        flower.remove();
+      }, 10000);
+    }
+
+    setInterval(createFlower, 250); // new flower every 0.25s
+  </script>
+</body>
+</html>
